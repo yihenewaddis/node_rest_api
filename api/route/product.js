@@ -3,10 +3,19 @@ const product = require('../model/product')
 const route = express.Router()
 const mongoose = require('mongoose')
 route.get('/',(req,res,next)=>{
-    product.find().
+    product.find({},{name:1,price:1}).
     exec().
     then((doc)=>{
-        res.status(200).json(doc)
+        res.status(200).json({
+            count:doc.length,
+            product:doc.map((docs)=>{
+                return{
+                    name: docs.name,
+                    price:docs.price,
+                    url:`http://localhost:300/product/${docs._id}`
+                }
+            })
+        })
     }).
     catch((err)=>{
         res.status(500).json({
@@ -60,7 +69,6 @@ route.get('/:id',(req,res,next)=>{
 })
 
 route.patch('/:id',(req,res,next)=>{
-    
     
     product.updateOne({_id:req.params.id},{$set:{
         name:req.body.name,
