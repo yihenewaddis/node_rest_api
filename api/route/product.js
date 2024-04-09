@@ -9,8 +9,14 @@ route.get('/',(req,res,next)=>{
 })
 
 route.post('/',(req,res,next)=>{
+
+    const createdProduct = {
+        name:req.body.name,
+        price:req.body.price
+    }
     res.status(200).json({
-        message:'post works corectly'
+        message:'post works corectly',
+        product:createdProduct
     })
 })
 
