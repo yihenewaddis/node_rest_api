@@ -36,7 +36,7 @@ route.post('/',(req,res,next)=>{
     .then(result=>{
         console.log(result)
         res.status(200).json({
-            message:'post works corectly',
+            message:'post works corectly you can do every thing now',
             product:result
         })
     })
