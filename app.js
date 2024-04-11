@@ -4,6 +4,7 @@ const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 const productRoute = require('./api/route/product')
 const orderRoute = require('./api/route/order')
+const userRoute = require('./api/route/user')
 const app = express()
 
 
@@ -32,6 +33,8 @@ app.use('/product',productRoute)
 app.use('/order',orderRoute)
 
 app.use('/Images',express.static('Images'))
+
+app.use('/signup',userRoute)
 
 app.use((req,res,next)=>{
     const error = new Error('Not found : invalid api end point')
