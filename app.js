@@ -31,6 +31,8 @@ app.use('/product',productRoute)
 
 app.use('/order',orderRoute)
 
+app.use('/Images',express.static('Images'))
+
 app.use((req,res,next)=>{
     const error = new Error('Not found : invalid api end point')
     error.status=404

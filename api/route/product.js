@@ -2,8 +2,20 @@ const express = require('express')
 const product = require('../model/product')
 const route = express.Router()
 const mongoose = require('mongoose')
+const multer = require('multer')
+const ImageStorafeRule = multer.diskStorage({
+    destination:function(req,file,cb){
+        cb(null,'./Images/')
+    },
+    filename:function(req,file,cb){
+        cb(null,new mongoose.Types.ObjectId()+file.originalname)
+    }
+})
+const upload = multer({storage:ImageStorafeRule,limits:{
+   fileSize:1024*1024*5 
+}})
 route.get('/',(req,res,next)=>{
-    product.find({},{name:1,price:1}).
+    product.find().
     exec().
     then((doc)=>{
         res.status(200).json({
@@ -12,6 +24,7 @@ route.get('/',(req,res,next)=>{
                 return{
                     name: docs.name,
                     price:docs.price,
+                    Image:docs.ProductImage,
                     url:`http://localhost:300/product/${docs._id}`
                 }
             })
@@ -19,18 +32,20 @@ route.get('/',(req,res,next)=>{
     }).
     catch((err)=>{
         res.status(500).json({
-            error:error
+            error:err
         })
     })
 })
 
 
 // to add new product to the database
-route.post('/',(req,res,next)=>{
+route.post('/',upload.single('ProductImage'),(req,res,next)=>{
+    console.log(req.file)
     const productModel = new product({
         _id : new mongoose.Types.ObjectId(),
         name : req.body.name,
-        price : req.body.price
+        price : req.body.price,
+        ProductImage:req.file.path
     })
     productModel.save()
     .then(result=>{

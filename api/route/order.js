@@ -2,7 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const ordermodel = require('../model/order')
 const product = require('../model/product')
-const { request } = require('../../app')
+
 const route = express.Router()
 
 
@@ -15,7 +15,6 @@ route.get('/',(req,res,next)=>{
         res.status(200).json(resonse)
     })
     .catch((error)=>{
-        console.log(error)
         res.status(500).json({
             error:error
         })
