@@ -3,7 +3,7 @@ const route = express.Router()
 const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 const User = require('../model/user')
-route.post('/',(req,res,next)=>{
+route.post('/signup',(req,res,next)=>{
     User.find({Email:req.body.Email})
     .exec()
     .then(user=>{
@@ -37,10 +37,41 @@ route.post('/',(req,res,next)=>{
             }
         })
         }
-    }).
-    catch((err)=>{
+    })
+    .catch((err)=>{
         res.status(500).json({
             mssage:err
+        })
+    })
+})
+
+route.post('/login',(req,res,err)=>{
+    User.find({Email:req.body.Email})
+    .exec()
+    .then(user=>{
+        if(user.length<1){
+            return res.status(401).json({
+                message:"Auth failed" 
+            })}
+        bcrypt.compare(req.body.password,user[0].password,(err,result)=>{
+            if(err){
+                return res.status(401).json({
+                    message:'auth failed'
+                })
+            }
+            if(result){
+                return res.status(200).json({
+                    message:"Auth Successful" 
+                })
+            }
+            res.status(401).json({
+                message:"auth failed" 
+            })
+        })
+    })
+    .catch(err=>{
+        res.status(500).json({
+            mssage:"this is the error"
         })
     })
 })

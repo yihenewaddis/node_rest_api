@@ -28,13 +28,14 @@ app.use((req,res,next)=>{
     next()
 })
 
+
+app.use('/user',userRoute)
+
 app.use('/product',productRoute)
 
 app.use('/order',orderRoute)
 
 app.use('/Images',express.static('Images'))
-
-app.use('/signup',userRoute)
 
 app.use((req,res,next)=>{
     const error = new Error('Not found : invalid api end point')
